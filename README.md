@@ -1,74 +1,87 @@
-# Multi-Attention Y-Net: A Spatiospectral Dual-Encoder Network for Medical Image Segmentation
+# Retinal Layer Segmentation with Multi-Attention Y-Net
 
-## Abstract
-Automated segmentation of retinal optical coherence tomography (OCT) images is crucial for diagnosing and monitoring eye diseases such as diabetic macular edema (DME) and age-related macular degeneration (AMD). The proposed Multi-Attention Y-Net (MA-YNet) builds upon Y-Net by integrating both spectral and spatial features to enhance segmentation performance. The method includes enhancements to the spatial encoder through a residual structure with a simple attention module and the use of multi-head self-attention at the lowest-level features. The proposed method achieves a mean Dice score of 0.86, advancing automated OCT image analysis.
+This project implements a retinal layer segmentation model using the Multi-Attention Y-Net architecture. The notebook provides an end-to-end solution for training, evaluating, and visualizing retinal layer segmentation from OCT images.
 
-## Index Terms
-- OCT segmentation
-- Y-Net
-- Multi-head self-attention
-- Channel attention
-- Spatial attention
+## Datasets Downloading and Preproccesing
 
-## I. Introduction
-Automated retinal OCT segmentation is essential for diagnosing various retinal diseases. Existing methods often face challenges in segmenting fluid pockets due to their inability to extract fine-grained features from complex OCT images. Y-Net has improved segmentation by integrating spectral and spatial features, yet fine-grained feature extraction and multiscale variations still pose challenges.
+Downloads the DUKE dataset 
 
-The proposed MA-YNet improves on Y-Net by adding:
-- **Residual structure** with a simple attention module to enhance the spatial encoder.
-- **Multi-head self-attention** to reconstruct feature maps and improve segmentation.
-- **Channel and spatial attention** modules for better feature fusion across scales.
 
-## II. Related Work
-Earlier methods like graph-based approaches and hybrid models combining neural networks with graph techniques were used for retinal OCT segmentation. More recent developments have focused on autoencoder architectures such as U-Net and Y-Net, with attention mechanisms and multiscale feature integration. MA-YNet builds upon the strengths of these methods, improving fine-grained segmentation and multiscale representation.
+Ensure the dataset is placed in the correct directory structure before running the notebook.
 
-## III. Method
-### A. Segmentation Framework
-MA-YNet uses a dual-encoder architecture with spatial and spectral branches:
-- **Spatial Encoder (Ec)**: Extracts local spatial features using a residual structure and attention module.
-- **Spectral Encoder (Ef)**: Extracts global frequency-domain features using Fast Fourier Convolutional (FFC) blocks.
-- **Decoder (G)**: Combines spatial and spectral features, using multi-head self-attention and attention modules for feature fusion.
+## Running the Notebook
 
-### B. Spatial Encoder Components
-1. **Residual Block**: Improves gradient flow and feature extraction by incorporating residual connections and attention mechanisms.
-2. **simAM (Simple Attention Module)**: A parameter-free attention mechanism that evaluates neuron importance to enhance feature extraction.
-3. **Attention Modules (SAM and CAM)**: Used for feature fusion at various stages to handle multiscale features.
-4. **Multi-Head Self-Attention (MSA)**: Captures global dependencies and refines pixel-level segmentation.
+### Prerequisites
+- Python 3.7+
+- Jupyter Notebook
+- Required Python packages ( install directly in the notebook)
 
-### C. Spectral Encoder Components
-1. **FFC Block**: A convolutional block that processes local and global features from the frequency domain.
-2. **Fourier Unit**: Applies FFT to the features and integrates them back into the spatial domain.
+### Steps to Run:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Nusrath-Amana/Enhanced-medical-image-segmentation-with-Multi-Attention-Y-Net
+   ```
 
-### D. Loss Functions
-- **Dice Loss**: Measures the overlap between predicted and ground truth segmentation maps.
-- **Cross-Entropy Loss**: Maximizes information gain between true and predicted labels.
-- **Combined Loss**: A weighted sum of Dice and Cross-Entropy Loss.
+2. Start the Jupyter Notebook:
+   ```bash
+   jupyter notebook
+   ```
 
-## IV. Experiments
-### A. Experimental Setup
-The Duke OCT dataset, consisting of scans from 10 patients, is used for training and testing. The protocol follows prior works with scans from subjects 1-6 for training, 7-8 for validation, and 9-10 for testing. Training is done with:
-- Batch size: 10
-- Learning rate: 5 × 10^-4
-- Weight decay: 1 × 10^-4
-- Max epochs: 100
-- Optimizer: Adam
+3. Open `y-net-extension.ipynb` and follow the instructions to execute the code cells.
 
-The images are resized to 224x224, and the combined loss function is used with equal weights for Dice and cross-entropy loss.
+## Model Architecture
 
-### B. Results
-The MA-YNet model is compared against Y-Net and other baseline approaches using the Duke OCT dataset. Preliminary results indicate an improvement in segmentation accuracy, achieving a mean Dice score of 0.86. Further experimentation with focal loss did not show significant performance improvements.
+The Multi-Attention Y-Net architecture includes the following components:
 
-## V. Conclusion
-MA-YNet improves upon Y-Net by integrating attention mechanisms and residual structures, enhancing the extraction of fine-grained features and multiscale target representation. The method demonstrates superior performance in OCT segmentation, advancing the state of the art in medical image analysis.
+1. **Dual Encoders:**
+   - Extract features from input images at different scales.
+
+2. **Multi-Attention Mechanisms:**
+   - Enhance feature representation by focusing on relevant regions.
+
+3. **Fourier Features:**
+   - Integrates Fourier-based feature extraction for better segmentation.
+
+4. **Decoder:**
+   - Reconstructs segmented images using refined features.
+
+## Training the Model
+
+1. **Preprocessing:**
+   - Load images and annotations.
+   - Apply necessary transformations (resizing, normalization, etc.).
+
+2. **Data Splitting:**
+   - Divide the dataset into training and validation sets.
+
+3. **Model Compilation:**
+   - Loss: Combined Dice and Cross-Entropy Loss.
+   - Optimizer: Adam with a custom learning rate.
+
+4. **Training Loop:**
+   - Adjust hyperparameters like batch size, epochs, and learning rate in the notebook.
+
+Run the training section in the notebook to train the Multi-Attention Y-Net model.
+
+## Evaluation
+
+The notebook includes detailed evaluation methods:
+- **Quantitative Metrics:**
+  - Dice Coefficient
+  - Intersection over Union (IoU)
+- **Qualitative Results:**
+  - Visualizations of ground truth vs. predicted segmentations.
+
+## Results
+
+Segmentation results and metric evaluations are provided in the notebook, with options to save visualizations and metrics for further analysis.
 
 ## References
-1. Y-Net: A Dual-Encoder Architecture for OCT Image Segmentation
-2. He et al., OCT segmentation through topology-based methods
-3. MDAN-U-Net for enhanced segmentation performance using multiscale features
-4. Duke OCT Dataset for retinal OCT image analysis
 
-## Acknowledgments
-Special thanks to the collaborators and experts who annotated the dataset and contributed to the experimental setup.
+This implementation is based on:
+- Farshad, A., et al. "Y-net: A spatio-spectral dual-encoder network for medical image segmentation." Medical Image Computing and Computer-Assisted Intervention MICCAI 2022. Springer Nature, 2022.
+- He, Y., et al. "Topology guaranteed segmentation of the human retina from OCT using convolutional neural networks." 2018.
+- Li, J., et al. "Multi-scale GCN-assisted two-stage network for joint segmentation of retinal layers and disc in peripapillary OCT images." 2021.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
